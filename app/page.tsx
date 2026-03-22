@@ -1,6 +1,124 @@
 'use client';
 
+import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+
+type FormState = {
+  name: string;
+  email: string;
+  company: string;
+  role: string;
+  revenue: string;
+  concentration: string;
+  forecast: string;
+  trigger: string;
+  notes: string;
+};
+
+const CALENDLY_URL = "https://calendly.com/scott-m-harris-1";
+const LINKEDIN_URL = "https://www.linkedin.com/in/mrscottharris/";
+const SNAPSHOT_URL = "https://revenue-fragility-web-app.vercel.app/";
+
+function parseNumber(value: string | null): number | null {
+  if (!value) return null;
+  const cleaned = value.replace(/[^0-9.-]/g, "");
+  if (!cleaned) return null;
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 export default function RevenueArchitectureDiagnosticLandingPage() {
+  const searchParams = useSearchParams();
+
+  const snapshot = useMemo(() => {
+    const fragilityScore = parseNumber(searchParams.get("fragilityScore"));
+    const concentrationRisk = searchParams.get("concentrationRisk");
+    const founderDependency = searchParams.get("founderDependency");
+    const forecastRisk = searchParams.get("forecastRisk");
+    const marginRisk = searchParams.get("marginRisk");
+    const evRisk = searchParams.get("evRisk");
+    const source = searchParams.get("source");
+
+    const hasSnapshotData =
+      fragilityScore !== null ||
+      !!concentrationRisk ||
+      !!founderDependency ||
+      !!forecastRisk ||
+      !!marginRisk ||
+      !!evRisk ||
+      !!source;
+
+    return {
+      hasSnapshotData,
+      fragilityScore,
+      concentrationRisk,
+      founderDependency,
+      forecastRisk,
+      marginRisk,
+      evRisk,
+      source,
+    };
+  }, [searchParams]);
+
+  const [form, setForm] = useState<FormState>({
+    name: "",
+    email: "",
+    company: "",
+    role: "",
+    revenue: "",
+    concentration: "",
+    forecast: "",
+    trigger: "",
+    notes: "",
+  });
+
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  const scoreLabel = useMemo(() => {
+    if (snapshot.fragilityScore === null) return null;
+    if (snapshot.fragilityScore >= 70) return "High structural fragility.";
+    if (snapshot.fragilityScore >= 50) return "Moderate structural fragility.";
+    return "Lower structural fragility.";
+  }, [snapshot.fragilityScore]);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const payload = {
+        ...form,
+        snapshot,
+        source: snapshot.source || "landing-page",
+      };
+
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Something went wrong.");
+      }
+
+      const redirectUrl = data?.redirectUrl || CALENDLY_URL;
+      window.location.href = redirectUrl;
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong.";
+      setSubmitError(message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
       <section className="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white">
@@ -223,6 +341,58 @@ export default function RevenueArchitectureDiagnosticLandingPage() {
               >
                 Open Revenue Fragility Snapshot
               </a>
+
+              {snapshot.hasSnapshotData ? (
+                <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    Snapshot detected
+                  </p>
+                  <div className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+                    {snapshot.fragilityScore !== null && (
+                      <p>
+                        <span className="font-semibold">Fragility Score:</span>{" "}
+                        {snapshot.fragilityScore}
+                      </p>
+                    )}
+                    {scoreLabel && (
+                      <p>
+                        <span className="font-semibold">Interpretation:</span>{" "}
+                        {scoreLabel}
+                      </p>
+                    )}
+                    {snapshot.concentrationRisk && (
+                      <p>
+                        <span className="font-semibold">Concentration Risk:</span>{" "}
+                        {snapshot.concentrationRisk}
+                      </p>
+                    )}
+                    {snapshot.founderDependency && (
+                      <p>
+                        <span className="font-semibold">Founder Dependency:</span>{" "}
+                        {snapshot.founderDependency}
+                      </p>
+                    )}
+                    {snapshot.forecastRisk && (
+                      <p>
+                        <span className="font-semibold">Forecast Risk:</span>{" "}
+                        {snapshot.forecastRisk}
+                      </p>
+                    )}
+                    {snapshot.marginRisk && (
+                      <p>
+                        <span className="font-semibold">Margin Risk:</span>{" "}
+                        {snapshot.marginRisk}
+                      </p>
+                    )}
+                    {snapshot.evRisk && (
+                      <p>
+                        <span className="font-semibold">EV Risk:</span>{" "}
+                        {snapshot.evRisk}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -329,13 +499,118 @@ export default function RevenueArchitectureDiagnosticLandingPage() {
                   </ul>
                 </div>
               </div>
+
+              <form onSubmit={handleSubmit} className="mb-6 grid gap-3">
+                <input
+                  name="name"
+                  placeholder="Your Name"
+                  required
+                  value={form.name}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  className="rounded-lg border border-white/20 bg-white/10 p-3 text-white placeholder-slate-400"
+                />
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  required
+                  value={form.email}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, email: e.target.value }))
+                  }
+                  className="rounded-lg border border-white/20 bg-white/10 p-3 text-white placeholder-slate-400"
+                />
+                <input
+                  name="company"
+                  placeholder="Agency Name"
+                  value={form.company}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, company: e.target.value }))
+                  }
+                  className="rounded-lg border border-white/20 bg-white/10 p-3 text-white placeholder-slate-400"
+                />
+                <input
+                  name="role"
+                  placeholder="Role"
+                  value={form.role}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, role: e.target.value }))
+                  }
+                  className="rounded-lg border border-white/20 bg-white/10 p-3 text-white placeholder-slate-400"
+                />
+                <input
+                  name="revenue"
+                  placeholder="Approx Revenue (e.g. $20M)"
+                  value={form.revenue}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, revenue: e.target.value }))
+                  }
+                  className="rounded-lg border border-white/20 bg-white/10 p-3 text-white placeholder-slate-400"
+                />
+                <input
+                  name="concentration"
+                  placeholder="% in Top 3 Clients"
+                  value={form.concentration}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, concentration: e.target.value }))
+                  }
+                  className="rounded-lg border border-white/20 bg-white/10 p-3 text-white placeholder-slate-400"
+                />
+                <select
+                  name="forecast"
+                  value={form.forecast}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, forecast: e.target.value }))
+                  }
+                  className="rounded-lg border border-white/20 bg-white/10 p-3 text-white"
+                >
+                  <option value="">Forecast Predictability</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+                <input
+                  name="trigger"
+                  placeholder="What prompted this?"
+                  value={form.trigger}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, trigger: e.target.value }))
+                  }
+                  className="rounded-lg border border-white/20 bg-white/10 p-3 text-white placeholder-slate-400"
+                />
+                <textarea
+                  name="notes"
+                  placeholder="Anything else I should know?"
+                  rows={4}
+                  value={form.notes}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, notes: e.target.value }))
+                  }
+                  className="rounded-lg border border-white/20 bg-white/10 p-3 text-white placeholder-slate-400"
+                />
+
+                {submitError ? (
+                  <p className="text-sm text-rose-300">{submitError}</p>
+                ) : null}
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="rounded-2xl bg-white px-6 py-4 text-base font-semibold text-slate-950 shadow-sm transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {submitting ? "Submitting..." : "Submit Intake and Continue"}
+                </button>
+              </form>
+
               <h3 className="text-2xl font-semibold">Ready to talk?</h3>
               <p className="mt-4 text-base leading-7 text-slate-300">
                 If you are an agency founder between $10M–$50M and forecasts are getting less reliable, growth feels harder than it should, or revenue is becoming too concentrated, this is the right place to start.
               </p>
               <div className="mt-8 flex flex-col gap-4">
                 <a
-                  href="https://calendly.com/scott-m-harris-1"
+                  href={CALENDLY_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-4 text-base font-semibold text-slate-950 shadow-sm transition hover:opacity-90"
@@ -343,7 +618,7 @@ export default function RevenueArchitectureDiagnosticLandingPage() {
                   Book a Revenue Architecture Diagnostic
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/mrscottharris/"
+                  href={LINKEDIN_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center justify-center rounded-2xl border border-white/20 bg-transparent px-6 py-4 text-base font-semibold text-white transition hover:bg-white/5"
