@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 type FormState = {
@@ -27,7 +27,7 @@ function parseNumber(value: string | null): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-export default function RevenueArchitectureDiagnosticLandingPage() {
+function RevenueArchitectureDiagnosticContent() {
   const searchParams = useSearchParams();
 
   const snapshot = useMemo(() => {
@@ -396,7 +396,6 @@ export default function RevenueArchitectureDiagnosticLandingPage() {
             </div>
           </div>
         </div>
-
         <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm md:p-12">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
             Credibility
@@ -632,5 +631,13 @@ export default function RevenueArchitectureDiagnosticLandingPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <RevenueArchitectureDiagnosticContent />
+    </Suspense>
   );
 }
