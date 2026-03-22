@@ -334,7 +334,7 @@ export default function RevenueArchitectureDiagnosticLandingPage() {
                 Use the Snapshot if you want a quick structural read. Book the Diagnostic if you want a founder-level review of where the instability is coming from and what to change first.
               </p>
               <a
-                href="https://revenue-fragility-web-app.vercel.app/"
+                href={SNAPSHOT_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-base font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50"
@@ -396,6 +396,7 @@ export default function RevenueArchitectureDiagnosticLandingPage() {
             </div>
           </div>
         </div>
+
         <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm md:p-12">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
             Credibility
