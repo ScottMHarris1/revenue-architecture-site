@@ -27,6 +27,27 @@ function parseNumber(value: string | null): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function SectionEyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+      {children}
+    </p>
+  );
+}
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <div className="space-y-4">
+      {items.map((item) => (
+        <div key={item} className="flex items-start gap-3">
+          <div className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-slate-950" />
+          <p className="text-base leading-7 text-slate-700">{item}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function RevenueArchitectureLandingPage() {
   const searchParams = useSearchParams();
 
@@ -121,72 +142,150 @@ function RevenueArchitectureLandingPage() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      {/* HERO */}
-      <section className="relative overflow-hidden border-b border-slate-200 bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0.04),_transparent_40%),linear-gradient(to_bottom,_#f8fafc,_#ffffff)]">
+      {/* Sticky nav */}
+      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <div className="text-sm font-semibold tracking-tight text-slate-950">
+            Revenue Architecture™
+          </div>
+          <nav className="hidden items-center gap-6 md:flex">
+            <a href="#problem" className="text-sm font-medium text-slate-600 hover:text-slate-950">
+              Problem
+            </a>
+            <a href="#self-test" className="text-sm font-medium text-slate-600 hover:text-slate-950">
+              Snapshot
+            </a>
+            <a href="#process" className="text-sm font-medium text-slate-600 hover:text-slate-950">
+              Process
+            </a>
+            <a href="#book" className="text-sm font-medium text-slate-600 hover:text-slate-950">
+              Book Review
+            </a>
+          </nav>
+          <a
+            href="#book"
+            className="inline-flex items-center justify-center rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+          >
+            Book 30-Min Review
+          </a>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-slate-200 bg-[radial-gradient(circle_at_top_left,_rgba(15,23,42,0.06),_transparent_34%),linear-gradient(to_bottom,_#f8fafc,_#ffffff)]">
         <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-1.5 text-sm font-medium text-slate-700 shadow-sm">
-              Revenue Architecture™ for Founder-Led Agencies
-            </div>
+          <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="max-w-4xl">
+              <div className="inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-1.5 text-sm font-medium text-slate-700 shadow-sm">
+                Founder-led agencies · $10M–$50M · Structural revenue diagnostics
+              </div>
 
-            <h1 className="mt-6 text-4xl font-semibold tracking-tight text-slate-950 md:text-6xl md:leading-tight">
-              Your agency is growing.
-              <br className="hidden md:block" />
-              But your revenue system might be breaking.
-            </h1>
+              <h1 className="mt-6 text-4xl font-semibold tracking-tight text-slate-950 md:text-6xl md:leading-[1.05]">
+                Your agency is growing.
+                <br />
+                But your revenue system might be breaking.
+              </h1>
 
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
-              Most agencies do not break when revenue drops.
-              <span className="font-semibold text-slate-900"> They break while revenue is still growing.</span>
-              <br className="hidden md:block" />
-              The issue is usually not pipeline.
-              It is <span className="font-semibold text-slate-900">Revenue Architecture</span> — the structure underneath growth.
-            </p>
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
+                Most agencies do not break when revenue drops.
+                <span className="font-semibold text-slate-950"> They break while revenue is still growing.</span>
+                <br className="hidden md:block" />
+                The issue is usually not pipeline.
+                It is <span className="font-semibold text-slate-950">Revenue Architecture</span> — the structure underneath growth.
+              </p>
 
-            <div className="mt-10 grid gap-4 md:grid-cols-3">
-              {[
-                "Forecasts are getting harder to trust.",
-                "Founder involvement is creeping back into deals.",
-                "Growth is happening, but margin and confidence are not keeping up.",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+                <a
+                  href="#book"
+                  className="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-sm transition hover:opacity-90"
                 >
-                  <p className="text-base font-medium leading-7 text-slate-800">{item}</p>
-                </div>
-              ))}
+                  Book a 30-Minute Review
+                </a>
+                <a
+                  href="#self-test"
+                  className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-4 text-base font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50"
+                >
+                  Run the Fragility Snapshot
+                </a>
+              </div>
+
+              <div className="mt-10 grid gap-4 md:grid-cols-3">
+                {[
+                  "Forecasts are getting harder to trust",
+                  "Founder involvement is creeping back into deals",
+                  "Growth is happening, but confidence is not",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+                  >
+                    <p className="text-base font-medium leading-7 text-slate-800">{item}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <a
-                href="#book"
-                className="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-sm transition hover:opacity-90"
-              >
-                Book a 30-Minute Review
-              </a>
-              <a
-                href="#self-test"
-                className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-4 text-base font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50"
-              >
-                Run the Fragility Snapshot
-              </a>
-            </div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl">
+              <SectionEyebrow>What this helps you answer</SectionEyebrow>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl">
+                Is your growth predictable, chaotic, or dependent on you?
+              </h2>
+              <div className="mt-6 space-y-4">
+                {[
+                  "How concentrated is revenue?",
+                  "Can you trust your forecast without going back into the weeds?",
+                  "Do managers own outcomes, or just report activity?",
+                  "Does margin hold as the business scales?",
+                  "Could growth continue without the founder rescuing key deals?",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200"
+                  >
+                    <p className="text-sm leading-6 text-slate-700">{item}</p>
+                  </div>
+                ))}
+              </div>
 
-            <p className="mt-5 text-sm leading-6 text-slate-500">
-              Built for founder-led agencies in the $10M–$50M range that want predictability, manager accountability, margin discipline, and transferable growth.
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <p className="text-sm leading-6 text-slate-600">
+                  In 30 minutes, we determine whether your revenue system is stable — or quietly breaking.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Credibility strip */}
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto grid max-w-6xl gap-6 px-6 py-8 md:grid-cols-3">
+          <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+            <p className="text-2xl font-semibold text-slate-950">$25M Example</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              Same revenue. Completely different enterprise value depending on structural durability.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+            <p className="text-2xl font-semibold text-slate-950">$18.75M Gap</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              Example value difference between fragile and durable revenue architecture.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+            <p className="text-2xl font-semibold text-slate-950">14 Days</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              Full diagnostic timeline from data review to executive readout and stabilization priorities.
             </p>
           </div>
         </div>
       </section>
 
-      {/* REFRAME */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+      {/* Problem */}
+      <section id="problem" className="mx-auto max-w-6xl px-6 py-20">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-              The hidden problem
-            </p>
+            <SectionEyebrow>The hidden problem</SectionEyebrow>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
               Growth is not the signal.
               <br />
@@ -194,50 +293,44 @@ function RevenueArchitectureLandingPage() {
             </h2>
             <p className="mt-5 text-base leading-8 text-slate-600">
               Most agencies assume growth is proof of health.
-              But experienced operators — and serious buyers — look for something else:
+              But experienced operators — and buyers — look for something else:
             </p>
 
-            <div className="mt-6 space-y-4">
-              {[
-                "How concentrated is revenue?",
-                "How predictable is forecasting?",
-                "Do managers own outcomes — or just report activity?",
-                "Does growth work without the founder?",
-                "Does margin hold as complexity scales?",
-              ].map((item) => (
-                <div key={item} className="flex items-start gap-3">
-                  <div className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-slate-950" />
-                  <p className="text-base leading-7 text-slate-700">{item}</p>
-                </div>
-              ))}
+            <div className="mt-6">
+              <BulletList
+                items={[
+                  "How concentrated is revenue?",
+                  "How predictable is forecasting?",
+                  "Do managers own outcomes?",
+                  "Whether growth works without the founder",
+                  "Whether margin holds as complexity scales",
+                ]}
+              />
             </div>
 
             <p className="mt-6 text-base leading-8 text-slate-600">
               When those answers are unclear, value is already leaking.
               Revenue may still be rising.
-              <span className="font-semibold text-slate-900"> Confidence usually is not.</span>
+              <span className="font-semibold text-slate-950"> Confidence usually is not.</span>
             </p>
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-              What fragility feels like
-            </p>
-
+            <SectionEyebrow>What fragility feels like</SectionEyebrow>
             <div className="mt-6 space-y-4">
               {[
-                "Forecast review turns into debate instead of confidence.",
-                "A deal slips and no one can clearly explain why.",
-                "Leadership meetings become problem-solving sessions.",
-                "One or two clients carry more weight than they should.",
-                "Managers inspect activity, but outcomes still feel unstable.",
-                "Nothing appears broken — but nothing feels truly stable.",
+                "Forecast review turns into debate instead of confidence",
+                "A deal slips and no one can clearly explain why",
+                "Leadership meetings become problem-solving sessions",
+                "One or two clients carry more weight than they should",
+                "Managers inspect activity, but outcomes still feel unstable",
+                "Nothing appears broken — but nothing feels stable",
               ].map((item) => (
                 <div
                   key={item}
                   className="flex items-start gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200"
                 >
-                  <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-slate-900" />
+                  <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-slate-950" />
                   <p className="text-base leading-7 text-slate-700">{item}</p>
                 </div>
               ))}
@@ -246,18 +339,16 @@ function RevenueArchitectureLandingPage() {
         </div>
       </section>
 
-      {/* FOUR PILLARS */}
+      {/* Framework */}
       <section className="border-y border-slate-200 bg-slate-950 text-white">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="max-w-4xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
-              Revenue Architecture™
-            </p>
+            <SectionEyebrow>Revenue Architecture™</SectionEyebrow>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
               Durable growth is determined by four structural revenue systems.
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-300">
-              Most agencies overbuild production — and neglect governance, resilience, and scalability.
+              Most agencies overbuild production and neglect governance, resilience, and scalability.
               Fragility does not come from lack of growth.
               <span className="font-semibold text-white"> It comes from imbalance.</span>
             </p>
@@ -267,19 +358,19 @@ function RevenueArchitectureLandingPage() {
             {[
               {
                 title: "Revenue Production",
-                body: "How revenue is generated, how predictable pipeline really is, and how client acquisition patterns behave under pressure.",
+                body: "How revenue is generated, how pipeline behaves, and how acquisition patterns hold up under pressure.",
               },
               {
                 title: "Revenue Governance",
-                body: "Forecasting discipline, manager accountability, and the operating cadence required to make growth defendable.",
+                body: "Forecasting discipline, manager accountability, and the cadence required to make outcomes defendable.",
               },
               {
                 title: "Revenue Resilience",
-                body: "Client concentration, renewal stability, diversification, and how exposed the business is if pressure hits the top accounts.",
+                body: "Client concentration, renewal stability, diversification, and how exposed the business is if pressure hits.",
               },
               {
                 title: "Revenue Scalability",
-                body: "Whether delivery capacity, margin density, and operating leverage improve as revenue increases — or quietly break.",
+                body: "Whether delivery capacity, margin density, and operating leverage improve as revenue grows — or quietly break.",
               },
             ].map((card) => (
               <div
@@ -294,41 +385,30 @@ function RevenueArchitectureLandingPage() {
         </div>
       </section>
 
-      {/* SELF TEST / SNAPSHOT */}
+      {/* Snapshot */}
       <section id="self-test" className="mx-auto max-w-6xl px-6 py-20">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Start here
-            </p>
+            <SectionEyebrow>Start here</SectionEyebrow>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
               Run the Revenue Fragility Snapshot.
             </h2>
             <p className="mt-5 text-base leading-8 text-slate-600">
-              If you want a quick read before booking time, use the interactive snapshot to pressure-test concentration risk,
+              If you want a quick read before booking time, use the snapshot to pressure-test concentration risk,
               founder dependency, forecast instability, margin exposure, and structural fragility.
-            </p>
-            <p className="mt-5 text-base leading-8 text-slate-600">
-              It is a fast way to see whether your growth is supported by real architecture —
-              or whether the system underneath it is starting to weaken.
             </p>
 
             <div className="mt-8 rounded-3xl border border-slate-200 bg-slate-50 p-7 shadow-sm">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Revenue Architecture™ self-test
-              </p>
-              <div className="mt-5 space-y-4">
-                {[
-                  "Is pipeline predictable and diversified?",
-                  "Do managers own forecasts and outcomes?",
-                  "Could you lose your top 3 clients without breaking the business?",
-                  "Does margin improve as revenue grows?",
-                ].map((item) => (
-                  <div key={item} className="flex items-start gap-3">
-                    <div className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-slate-950" />
-                    <p className="text-base leading-7 text-slate-700">{item}</p>
-                  </div>
-                ))}
+              <SectionEyebrow>Self-test prompts</SectionEyebrow>
+              <div className="mt-5">
+                <BulletList
+                  items={[
+                    "Is pipeline predictable and diversified?",
+                    "Do managers own forecasts and outcomes?",
+                    "Could you lose your top 3 clients without breaking the business?",
+                    "Does margin improve as revenue grows?",
+                  ]}
+                />
               </div>
 
               <a
@@ -343,9 +423,7 @@ function RevenueArchitectureLandingPage() {
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Snapshot results
-            </p>
+            <SectionEyebrow>Snapshot results</SectionEyebrow>
             <p className="mt-4 text-base leading-7 text-slate-700">
               If you came from the snapshot, your results will appear here and carry into the intake form below.
             </p>
@@ -404,9 +482,7 @@ function RevenueArchitectureLandingPage() {
             )}
 
             <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Typical output
-              </p>
+              <SectionEyebrow>Typical output</SectionEyebrow>
               <div className="mt-4 space-y-3 text-sm leading-6 text-slate-700">
                 <p>• Revenue Architecture™ Score</p>
                 <p>• Concentration risk profile</p>
@@ -420,31 +496,23 @@ function RevenueArchitectureLandingPage() {
         </div>
       </section>
 
-      {/* CASE STUDY / VALUE */}
+      {/* Value + deliverables */}
       <section className="bg-slate-50">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
             <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm md:p-10">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                What buyers actually underwrite
-              </p>
+              <SectionEyebrow>What buyers actually underwrite</SectionEyebrow>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
                 Two agencies can have the same revenue and completely different value underneath.
               </h2>
               <p className="mt-6 text-base leading-8 text-slate-600">
-                Revenue alone does not determine quality.
-                Buyers look for where the system breaks under pressure:
-                where forecasts cannot be trusted, where growth depends on the founder, where margin does not hold, and where management depth is thin.
-              </p>
-              <p className="mt-6 text-base leading-8 text-slate-600">
-                Revenue Architecture™ determines the stability of EBITDA — and the quality of the multiple.
+                Revenue alone does not determine quality. Buyers look for where the system breaks under pressure:
+                where forecasts cannot be trusted, where growth depends on the founder, where margin does not hold,
+                and where management depth is thin.
               </p>
 
               <div className="mt-8 rounded-2xl bg-slate-50 p-6 ring-1 ring-slate-200">
-                <p className="text-base font-medium text-slate-900">
-                  Example:
-                </p>
-                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
                     <p className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
                       Fragile architecture
@@ -471,9 +539,7 @@ function RevenueArchitectureLandingPage() {
             </div>
 
             <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm md:p-10">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                What the diagnostic measures
-              </p>
+              <SectionEyebrow>What the diagnostic measures</SectionEyebrow>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
                 A structural review of the revenue system — not a generic GTM audit.
               </h2>
@@ -497,38 +563,20 @@ function RevenueArchitectureLandingPage() {
                   </div>
                 ))}
               </div>
-
-              <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  What you walk away with
-                </p>
-                <div className="mt-4 space-y-3 text-sm leading-6 text-slate-700">
-                  <p>• Revenue Architecture™ Score</p>
-                  <p>• Structural fragility analysis</p>
-                  <p>• Concentration and risk profile</p>
-                  <p>• Forecast reliability assessment</p>
-                  <p>• Margin density analysis</p>
-                  <p>• Manager accountability gap diagnosis</p>
-                  <p>• Executive briefing</p>
-                  <p>• 90-day stabilization roadmap</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PROCESS */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
+      {/* Process */}
+      <section id="process" className="mx-auto max-w-6xl px-6 py-20">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-            Process
-          </p>
+          <SectionEyebrow>Process</SectionEyebrow>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
             Completed in 14 days.
           </h2>
           <p className="mt-5 text-base leading-8 text-slate-600">
-            The full Revenue Architecture™ Diagnostic is designed to move quickly from structural ambiguity to prioritized action.
+            The full Revenue Architecture™ Diagnostic moves quickly from structural ambiguity to ranked priorities and a stabilization roadmap.
           </p>
         </div>
 
@@ -569,14 +617,12 @@ function RevenueArchitectureLandingPage() {
         </div>
       </section>
 
-      {/* AUTHORITY */}
+      {/* Authority */}
       <section className="border-y border-slate-200 bg-slate-950 text-white">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
-                About Scott Michael Harris
-              </p>
+              <SectionEyebrow>About Scott Michael Harris</SectionEyebrow>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
                 I do not optimize revenue.
                 <br />
@@ -594,21 +640,21 @@ function RevenueArchitectureLandingPage() {
 
               <div className="grid gap-4 pt-2 md:grid-cols-3">
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                  <p className="text-2xl font-semibold text-white">Enterprise GTM</p>
+                  <p className="text-xl font-semibold text-white">Google</p>
                   <p className="mt-2 text-sm leading-6 text-slate-300">
-                    Google, Amazon, commercialization, scaled revenue systems, and operating rigor.
+                    Enterprise GTM, scaled revenue systems, commercialization, and operating rigor.
                   </p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                  <p className="text-2xl font-semibold text-white">Strategy</p>
+                  <p className="text-xl font-semibold text-white">Amazon</p>
                   <p className="mt-2 text-sm leading-6 text-slate-300">
-                    McKinsey and growth-stage commercial operating model work.
+                    Commercial ownership, growth management, and operator-level business discipline.
                   </p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                  <p className="text-2xl font-semibold text-white">Revenue Architecture™</p>
+                  <p className="text-xl font-semibold text-white">McKinsey</p>
                   <p className="mt-2 text-sm leading-6 text-slate-300">
-                    Forecast governance, manager accountability, structural durability, and value creation.
+                    Strategy, structural diagnosis, and growth-stage commercial operating models.
                   </p>
                 </div>
               </div>
@@ -617,47 +663,37 @@ function RevenueArchitectureLandingPage() {
         </div>
       </section>
 
-      {/* BOOK */}
+      {/* Booking */}
       <section id="book" className="bg-white">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Next step
-              </p>
+              <SectionEyebrow>Next step</SectionEyebrow>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
                 Start with a 30-minute Revenue Architecture Review.
               </h2>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
                 Before a full diagnostic, we start with a focused founder-level conversation.
-                In 30 minutes, we determine whether your revenue system is stable —
-                or quietly breaking.
+                In 30 minutes, we determine whether your revenue system is stable — or quietly breaking.
               </p>
 
               <div className="mt-8 rounded-3xl border border-slate-200 bg-slate-50 p-7 shadow-sm">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  In this conversation, we will cover:
-                </p>
-                <div className="mt-5 space-y-4">
-                  {[
-                    "Where growth feels most unpredictable",
-                    "How revenue concentration is evolving",
-                    "Where operational strain is appearing",
-                    "Whether forecast and manager accountability are actually holding",
-                    "Whether a full Revenue Architecture™ Diagnostic would be valuable",
-                  ].map((item) => (
-                    <div key={item} className="flex items-start gap-3">
-                      <div className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-slate-950" />
-                      <p className="text-base leading-7 text-slate-700">{item}</p>
-                    </div>
-                  ))}
+                <SectionEyebrow>In this conversation</SectionEyebrow>
+                <div className="mt-5">
+                  <BulletList
+                    items={[
+                      "Where growth feels most unpredictable",
+                      "How revenue concentration is evolving",
+                      "Where operational strain is appearing",
+                      "Whether forecast and manager accountability are actually holding",
+                      "Whether a full diagnostic would be valuable",
+                    ]}
+                  />
                 </div>
               </div>
 
               <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  Best fit
-                </p>
+                <SectionEyebrow>Best fit</SectionEyebrow>
                 <p className="mt-4 text-base leading-8 text-slate-600">
                   This is best suited for founder-led agencies between $10M–$50M in revenue that are growing,
                   but starting to feel hidden pressure underneath the system:
@@ -667,9 +703,7 @@ function RevenueArchitectureLandingPage() {
             </div>
 
             <div className="rounded-[2rem] border border-slate-200 bg-slate-950 p-8 text-white shadow-2xl md:p-10">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
-                Short intake
-              </p>
+              <SectionEyebrow>Short intake</SectionEyebrow>
               <p className="mt-4 text-base leading-7 text-slate-300">
                 A few details before the call help make the conversation sharper and more useful.
               </p>
@@ -683,7 +717,7 @@ function RevenueArchitectureLandingPage() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, name: e.target.value }))
                   }
-                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none ring-0"
+                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none"
                 />
                 <input
                   name="email"
@@ -694,7 +728,7 @@ function RevenueArchitectureLandingPage() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, email: e.target.value }))
                   }
-                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none ring-0"
+                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none"
                 />
                 <input
                   name="company"
@@ -703,7 +737,7 @@ function RevenueArchitectureLandingPage() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, company: e.target.value }))
                   }
-                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none ring-0"
+                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none"
                 />
                 <input
                   name="role"
@@ -712,7 +746,7 @@ function RevenueArchitectureLandingPage() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, role: e.target.value }))
                   }
-                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none ring-0"
+                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none"
                 />
                 <input
                   name="revenue"
@@ -721,7 +755,7 @@ function RevenueArchitectureLandingPage() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, revenue: e.target.value }))
                   }
-                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none ring-0"
+                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none"
                 />
                 <input
                   name="concentration"
@@ -730,7 +764,7 @@ function RevenueArchitectureLandingPage() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, concentration: e.target.value }))
                   }
-                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none ring-0"
+                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none"
                 />
                 <select
                   name="forecast"
@@ -738,7 +772,7 @@ function RevenueArchitectureLandingPage() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, forecast: e.target.value }))
                   }
-                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white outline-none ring-0"
+                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white outline-none"
                 >
                   <option value="">Forecast Predictability</option>
                   <option value="High">High</option>
@@ -752,7 +786,7 @@ function RevenueArchitectureLandingPage() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, trigger: e.target.value }))
                   }
-                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none ring-0"
+                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none"
                 />
                 <textarea
                   name="notes"
@@ -762,7 +796,7 @@ function RevenueArchitectureLandingPage() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, notes: e.target.value }))
                   }
-                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none ring-0"
+                  className="rounded-xl border border-white/15 bg-white/10 p-3 text-white placeholder-slate-400 outline-none"
                 />
 
                 {submitError ? (
